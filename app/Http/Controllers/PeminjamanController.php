@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 /** Pengelolaan peminjaman oleh admin dan petugas. */
@@ -19,12 +20,14 @@ class PeminjamanController extends Controller
     }
 
     /**
-     * A4 (CELAH IDOR, sengaja untuk Soal 1).
-     * Data diambil berdasarkan id saja, tanpa memeriksa siapa pemiliknya.
+     * A4 (diperbaiki, Soal 4): akses diperiksa lewat PeminjamanPolicy@view.
+     * Admin dan petugas boleh melihat semua, siswa hanya miliknya sendiri.
      */
     public function show($id): View
     {
         $peminjaman = Peminjaman::with(['anggota', 'buku'])->findOrFail($id);
+
+        Gate::authorize('view', $peminjaman);
 
         return view('peminjaman.show', compact('peminjaman'));
     }
