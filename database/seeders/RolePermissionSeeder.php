@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Support\Anggotas;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -79,6 +80,13 @@ class RolePermissionSeeder extends Seeder
                 ['email' => $email],
                 ['name' => $nama, 'password' => Hash::make('password123')]
             );
+
+            // Soal 5: password admin tidak lagi password123.
+            // Diambil dari ADMIN_PASSWORD di .env, atau acak kalau tidak diisi.
+            if ($namaRole === 'admin') {
+                $user->password = Hash::make(env('ADMIN_PASSWORD') ?: Str::random(32));
+                $user->save();
+            }
 
             $user->syncRoles([$namaRole]);
 

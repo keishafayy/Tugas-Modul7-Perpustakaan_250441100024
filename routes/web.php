@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/buku', [BukuController::class, 'index'])
         ->middleware('permission:lihat-daftar-buku')->name('buku.index');
 
-    // ---- Kelola buku (tambah, ubah, hapus) : pemeriksaan permission Modul 5 ----
+    // ---- Kelola buku (tambah, ubah, hapus): Gate kelola-buku ----
     Route::middleware('can:kelola-buku')->group(function () {
         Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
         Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
@@ -62,15 +62,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/buku/{id}', [BukuController::class, 'show'])
         ->whereNumber('id')->middleware('permission:lihat-daftar-buku')->name('buku.show');
 
-    // ======================= SOAL 1: CELAH KEAMANAN SENGAJA (A2, A3, A4) =======================
-
-    // A2: SQL Injection (query digabung langsung ke string SQL)
+    // ---- Pencarian judul (memakai query binding) ----
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
 
-    // A4: IDOR (detail peminjaman tanpa pemeriksaan pemilik)
-    Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
-
-    // ===========================================================================================
+    // ---- Detail peminjaman (dijaga PeminjamanPolicy@view) ----
+    Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])
+        ->whereNumber('id')->name('peminjaman.show');
 
     // ---- Endpoint data buku untuk Fetch API (Modul 4) lewat session login ----
     Route::prefix('data')->name('data.')->group(function () {
