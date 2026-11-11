@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 | Halaman publik
 |--------------------------------------------------------------------------
 */
+
 Route::view('/', 'home')->name('home');
 
 /*
@@ -49,7 +50,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('permission:lihat-daftar-buku')->name('buku.index');
 
     // ---- Kelola buku (tambah, ubah, hapus) : pemeriksaan permission Modul 5 ----
-    Route::middleware('permission:kelola-data-buku')->group(function () {
+    Route::middleware('can:kelola-buku')->group(function () {
         Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
         Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
         Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->whereNumber('buku')->name('buku.edit');
@@ -76,7 +77,7 @@ Route::middleware('auth')->group(function () {
         Route::get('buku', [DataBukuController::class, 'index'])
             ->middleware('permission:lihat-daftar-buku')->name('buku.index');
 
-        Route::middleware('permission:kelola-data-buku')->group(function () {
+        Route::middleware('can:kelola-buku')->group(function () {
             Route::post('buku', [DataBukuController::class, 'store'])->name('buku.store');
             Route::put('buku/{buku}', [DataBukuController::class, 'update'])->name('buku.update');
             Route::delete('buku/{buku}', [DataBukuController::class, 'destroy'])->name('buku.destroy');
@@ -85,7 +86,7 @@ Route::middleware('auth')->group(function () {
 
     // ---- Kelola buku versi Fetch API (Modul 4) ----
     Route::get('/kelola/buku', [KelolaBukuController::class, 'index'])
-        ->middleware('permission:kelola-data-buku')->name('kelola.buku');
+        ->middleware('can:kelola-buku')->name('kelola.buku');
 
     // ---- Peminjaman dan pengembalian: admin dan petugas ----
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])

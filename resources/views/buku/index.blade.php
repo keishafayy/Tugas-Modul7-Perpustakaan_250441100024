@@ -102,7 +102,7 @@
 
     <div class="aksi-atas">
         <a href="{{ route('dashboard') }}" class="tombol">&larr; Dashboard</a>
-        @can('kelola-data-buku')
+        @can('kelola-buku')
         <a href="{{ route('buku.create') }}" class="tombol utama">+ Tambah Buku</a>
         @endcan
     </div>
@@ -131,7 +131,7 @@
                     <td>
                         <div class="aksi">
                             <a href="{{ route('buku.show', $b->id) }}" class="tombol utama">Detail</a>
-                            @can('kelola-data-buku')
+                            @can('kelola-buku')
                             <a href="{{ route('buku.edit', $b->id) }}" class="tombol ubah">Ubah</a>
                             {{-- A3 (CELAH CSRF, sengaja untuk Soal 1): hapus lewat tautan GET --}}
                             <form method="POST" action="{{ route('buku.destroy', $b->id) }}"
