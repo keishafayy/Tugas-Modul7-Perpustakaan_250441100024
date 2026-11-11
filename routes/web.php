@@ -66,9 +66,6 @@ Route::middleware('auth')->group(function () {
     // A2: SQL Injection (query digabung langsung ke string SQL)
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
 
-    // A3: CSRF (penghapusan lewat GET tanpa token)
-    Route::get('/buku/{buku}/hapus', [BukuController::class, 'destroy'])->name('buku.hapus');
-
     // A4: IDOR (detail peminjaman tanpa pemeriksaan pemilik)
     Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
 
