@@ -1,4 +1,9 @@
 <x-guest-layout>
+    <!-- Judul halaman (Soal 5: teks yang diubah untuk uji deploy otomatis) -->
+    <h2 class="mb-4 text-center text-xl font-semibold text-gray-800">
+        Login e-Pustaka - 250441100024
+    </h2>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
